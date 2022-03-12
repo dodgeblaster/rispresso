@@ -1,6 +1,6 @@
 # Rispresso
 
-This project is an implementation of the serverless espresso demo app made by the SAE team for ReInvent 2021. This project demonstrates how to use the following frameworks to build a non trivial application:
+This project is an implementation of the serverless espresso demo app made for ReInvent 2021 demonstrating serverless services. This project demonstrates how to use the following frameworks to build a non trivial application:
 
 -   Rise API
 -   Rise FOCUS
