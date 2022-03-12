@@ -8,7 +8,7 @@ This project is an implementation of the serverless espresso demo app made for R
 
 ## Architecture
 
-![](./overview.png)
+![](./overview.svg)
 
 ## What RISE API and RISE FOCUS do well
 
