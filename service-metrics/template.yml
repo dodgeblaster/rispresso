@@ -1,0 +1,32 @@
+Parameters:
+    Stage:
+        Type: String
+        Default: dev
+
+Resources:
+    table:
+        Type: AWS::DynamoDB::Table
+        Properties:
+            TableName: !Sub rispressometrics${Stage}
+            AttributeDefinitions:
+                - AttributeName: PK
+                  AttributeType: S
+                - AttributeName: SK
+                  AttributeType: S
+                - AttributeName: GSI1
+                  AttributeType: S
+            KeySchema:
+                - AttributeName: PK
+                  KeyType: HASH
+                - AttributeName: SK
+                  KeyType: RANGE
+            BillingMode: PAY_PER_REQUEST
+            GlobalSecondaryIndexes:
+                - IndexName: GSI1
+                  KeySchema:
+                      - AttributeName: GSI1
+                        KeyType: HASH
+                      - AttributeName: SK
+                        KeyType: RANGE
+                  Projection:
+                      ProjectionType: ALL

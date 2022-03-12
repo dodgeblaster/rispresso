@@ -1,0 +1,7 @@
+{
+    "scripts": {
+        "deploy-service": "focus deploy",
+        "deploy-infra": "aws cloudformation deploy --stack-name=RispressoAnalyticsDev --template-file=template.yml --capabilities=CAPABILITY_NAMED_IAM --parameter-overrides=\"Stage=dev\" --region=us-east-1",
+        "remove-infra": "aws cloudformation delete-stack --stack-name=RispressoAnalyticsDev --region=us-east-1"
+    }
+}

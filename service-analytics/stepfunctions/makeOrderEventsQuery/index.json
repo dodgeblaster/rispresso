@@ -1,0 +1,74 @@
+{
+    "StartAt": "Athena StartQueryExecution",
+    "States": {
+        "Athena StartQueryExecution": {
+            "Type": "Task",
+            "Resource": "arn:aws:states:::athena:startQueryExecution",
+            "Parameters": {
+                "QueryString.$": "$.query",
+                "WorkGroup": "rispresso"
+            },
+            "Next": "Athena GetQueryExecution",
+            "ResultPath": "$.stash.QueryExecution"
+        },
+        "Athena GetQueryExecution": {
+            "Type": "Task",
+            "Resource": "arn:aws:states:::athena:getQueryExecution",
+            "Parameters": {
+                "QueryExecutionId.$": "$.stash.QueryExecution.QueryExecutionId"
+            },
+            "Next": "DetermineState",
+            "ResultPath": "$.stash"
+        },
+        "DetermineState": {
+            "Type": "Choice",
+            "Choices": [
+                {
+                    "Variable": "$.stash.QueryExecution.Status.State",
+                    "StringEquals": "QUEUED",
+                    "Next": "Wait"
+                },
+                {
+                    "Variable": "$.stash.QueryExecution.Status.State",
+                    "StringEquals": "RUNNING",
+                    "Next": "Wait"
+                }
+            ],
+            "Default": "Athena GetQueryResults"
+        },
+        "Athena GetQueryResults": {
+            "Type": "Task",
+            "Resource": "arn:aws:states:::athena:getQueryResults",
+            "Parameters": {
+                "MaxResults": 10,
+                "QueryExecutionId.$": "$.stash.QueryExecution.QueryExecutionId"
+            },
+            "Next": "Emit Event",
+            "ResultPath": "$.stash"
+        },
+        "Emit Event": {
+            "Type": "Task",
+            "Resource": "arn:aws:states:::events:putEvents",
+            "Parameters": {
+                "Entries": [
+                    {
+                        "Detail": {
+                            "storeId.$": "$.storeId",
+                            "queryId.$": "$.queryId",
+                            "data.$": "States.JsonToString($.stash.ResultSet)"
+                        },
+                        "DetailType": "queryCompleted",
+                        "EventBusName": "default",
+                        "Source": "custom.rispressoanalyticsdev"
+                    }
+                ]
+            },
+            "End": true
+        },
+        "Wait": {
+            "Type": "Wait",
+            "Seconds": 1,
+            "Next": "Athena GetQueryExecution"
+        }
+    }
+}

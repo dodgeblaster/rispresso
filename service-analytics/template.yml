@@ -1,0 +1,120 @@
+Parameters:
+    Stage:
+        Type: String
+        Default: dev
+
+Resources:
+    # * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+    # Firehose: To take events and store them in S3
+    # * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+    Firehose:
+        Type: AWS::KinesisFirehose::DeliveryStream
+        Properties:
+            DeliveryStreamType: DirectPut
+            S3DestinationConfiguration:
+                CompressionFormat: UNCOMPRESSED
+                BucketARN: !GetAtt AnalyticsBucket.Arn
+                Prefix: orderData/
+                BufferingHints:
+                    IntervalInSeconds: 60
+                    SizeInMBs: 1
+                RoleARN: !GetAtt FirehoseRole.Arn
+    FirehoseRole:
+        Type: AWS::IAM::Role
+        Properties:
+            AssumeRolePolicyDocument:
+                Version: 2012-10-17
+                Statement:
+                    - Effect: Allow
+                      Action:
+                          - sts:AssumeRole
+                      Principal:
+                          Service:
+                              - firehose.amazonaws.com
+            Policies:
+                - PolicyName: PolicyDynamoDB
+                  PolicyDocument:
+                      Version: '2012-10-17'
+                      Statement:
+                          - Effect: Allow
+                            Action:
+                                - 's3:AbortMultipartUpload'
+                                - 's3:GetBucketLocation'
+                                - 's3:GetObject'
+                                - 's3:ListBucket'
+                                - 's3:ListBucketMultipartUploads'
+                                - 's3:PutObject'
+                            Resource:
+                                - !GetAtt AnalyticsBucket.Arn
+                                - !Sub ${AnalyticsBucket.Arn}/*
+
+    # * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+    # S3: Place to store data
+    # * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+    AnalyticsBucket:
+        Type: AWS::S3::Bucket
+
+    # * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+    # AWS Glue: Define structure of data in S3
+    # * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+    GlueDatabase:
+        Type: AWS::Glue::Database
+        Properties:
+            CatalogId: !Ref 'AWS::AccountId'
+            DatabaseInput:
+                Name: rispresso
+    GlueTable:
+        Type: AWS::Glue::Table
+        Properties:
+            CatalogId: !Ref 'AWS::AccountId'
+            DatabaseName: !Ref GlueDatabase
+            TableInput:
+                Name: order_events
+                StorageDescriptor:
+                    Location: !Join
+                        - ''
+                        - - 's3://'
+                          - !Ref AnalyticsBucket
+                          - /
+                          - orderData
+                    InputFormat: org.apache.hadoop.mapred.TextInputFormat
+                    OutputFormat: org.apache.hadoop.hive.ql.io.HiveIgnoreKeyTextOutputFormat
+                    SerdeInfo:
+                        SerializationLibrary: org.apache.hive.hcatalog.data.JsonSerDe
+                    Columns:
+                        - Name: event
+                          Type: string
+                        - Name: storeId
+                          Type: string
+                        - Name: orderId
+                          Type: string
+                        - Name: customerId
+                          Type: string
+                        - Name: author
+                          Type: string
+                        - Name: time
+                          Type: bigint
+
+    # * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+    # Athena: To query data in s3 informed by Glue structure
+    # * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+    AthenaWorkGroup:
+        Type: AWS::Athena::WorkGroup
+        Properties:
+            Name: rispresso
+            WorkGroupConfiguration:
+                ResultConfiguration:
+                    OutputLocation: !Join
+                        - ''
+                        - - 's3://'
+                          - !Ref AnalyticsBucket
+                          - /
+                          - result
+
+Outputs:
+    BucketName:
+        Value: !Ref AnalyticsBucket
+    BucketArn:
+        Value: !GetAtt AnalyticsBucket.Arn
+    FirehoseName:
+        Value: !Ref Firehose
