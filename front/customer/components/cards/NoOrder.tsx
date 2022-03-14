@@ -1,13 +1,24 @@
 import { useState, useEffect } from 'react'
-import { NavBar } from '../base/NavBar'
-import { Input } from '../base/Input'
-import { SavingIcon } from '../base/SavingIcon'
+import { ForwardArrowIcon, SavingIcon } from './icons/Icons'
+import { useRiseSocket } from '../../hooks/useRiseSocket'
 import { useRiseGet } from '../../hooks/useRiseGet'
 import { useRisePost } from '../../hooks/useRisePost'
 
-import { PageState } from '../interfaces'
+function Input(props: any) {
+  return (
+    <div className="mb-4 flex w-full flex-col">
+      <label className="text-white">{props.name}</label>
+      <input
+        key={props.name}
+        onChange={(e: any) => props.setValue(e.target.value)}
+        value={props.value}
+        className="py4 rounded bg-gray-200 px-4 py-4"
+      ></input>
+    </div>
+  )
+}
 
-export function Settings(props: any) {
+export function NoOrder(props: any) {
   const [ccInfo, loadingCcInfo] = useRiseGet({
     action: 'getCreditCardInfo',
     input: {},
@@ -76,18 +87,23 @@ export function Settings(props: any) {
   }
 
   return (
-    <div className="relative">
-      <NavBar page="Settings" back={() => props.setPage(PageState.HOME)} />
-      <div className="px-10 py-4">
-        <Input name="Name" value={name} setValue={setNameValue} />
-        <Input name="CreditCard" value={cc} setValue={setCcValue} />
-        {saving && (
-          <p className="px-2 py-2  ">
-            <SavingIcon />
-            <span className="ml-2 inline-block">Saving...</span>
-          </p>
-        )}
-      </div>
+    <div className="mx-10 my-10 flex max-w-2xl flex-col items-center justify-center overflow-hidden md:mx-auto">
+      {saving && (
+        <div className="flex flex-col items-center px-2 py-2">
+          <SavingIcon />
+          <p className="ml-2 inline-block text-white">Saving</p>
+        </div>
+      )}
+
+      <Input name="Name for Order" value={name} setValue={setNameValue} />
+      <Input name="CreditCard" value={cc} setValue={setCcValue} />
+
+      <button
+        onClick={() => props.setPosition(1)}
+        className="flex w-full rounded-lg bg-gradient-to-br from-yellow-800 to-yellow-600 px-4 py-4 text-white"
+      >
+        <span className="mr-2">Order Now</span> <ForwardArrowIcon />
+      </button>
     </div>
   )
 }

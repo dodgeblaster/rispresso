@@ -264,6 +264,23 @@ export function Board(props: any) {
   if (apiOrdersLoading || connecting) {
     return 'Loading...'
   }
+
+  const emptyBoard =
+    orderedList.length === 0 &&
+    startedList.length === 0 &&
+    pickupList.length === 0
+  if (emptyBoard) {
+    return (
+      <div>
+        <NavBar page="Barista" back={props.back} />
+        <div className="absolute top-16 left-0 right-0 bottom-0 flex items-center justify-center bg-gray-200">
+          <p className="rounded bg-white px-8 py-4 text-lg shadow-lg">
+            All orders have been completed! 🎉🎉🎉
+          </p>
+        </div>
+      </div>
+    )
+  }
   return (
     <div>
       <NavBar page="Barista" back={props.back} />

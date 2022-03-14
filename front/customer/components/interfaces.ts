@@ -11,13 +11,6 @@ export enum Status {
   'ORDER_CANCELLATION_COMPLETE' = 'ORDER_CANCELLATION_COMPLETE',
 }
 
-export enum PageState {
-  HOME = 'home',
-  SETTINGS = 'settings',
-  CHOOSE_STORE = 'choose-store',
-  MAKE_ORDER = 'make-order',
-}
-
 export interface CurrentOrderDetails {
   amount: number
   customerName: string

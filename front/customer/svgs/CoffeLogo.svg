@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="90px" height="102px" viewBox="0 0 90 102" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>Artboard</title>
+    <g id="Artboard" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <ellipse id="Oval-Copy-6" stroke="#979797" stroke-width="5" cx="42.5" cy="47.5" rx="40" ry="11"></ellipse>
+        <path d="M28.8294747,7.14175716 C26.601837,12.0427791 26.0449276,16.6013679 27.1587464,20.8175236 C28.8294747,27.1417572 32.8732969,28.2278651 34.2454571,33.9571082 C35.1602306,37.7766037 34.3139398,42.1714866 31.7065848,47.1417572" id="Path-2-Copy-5" stroke="#979797" stroke-width="5" stroke-linecap="round"></path>
+        <path d="M48.8294747,4.14175716 C46.601837,9.0427791 46.0449276,13.6013679 47.1587464,17.8175236 C48.8294747,24.1417572 52.8732969,25.2278651 54.2454571,30.9571082 C55.1602306,34.7766037 54.3139398,39.1714866 51.7065848,44.1417572" id="Path-2-Copy-4" stroke="#979797" stroke-width="5" stroke-linecap="round"></path>
+        <path d="M38.8294747,5.14175716 C36.601837,10.0427791 36.0449276,14.6013679 37.1587464,18.8175236 C38.8294747,25.1417572 42.8732969,26.2278651 44.2454571,31.9571082 C45.1602306,35.7766037 44.3139398,40.1714866 41.7065848,45.1417572" id="Path-2-Copy-3" stroke="#979797" stroke-width="5" stroke-linecap="round"></path>
+        <path d="M82.5664923,47.5 C85.4058962,67.4742211 79.7975477,81.17127 65.7414467,88.5911467 C51.6853457,96.0110234 35.7655546,99.2437477 17.9820735,98.2893194 L85,98.2893194" id="Path-3-Copy" stroke="#979797" stroke-width="5" stroke-linecap="round"></path>
+        <line x1="16" y1="98.3776042" x2="84.7903646" y2="98.3776042" id="Path-2" stroke="#979797" stroke-width="5" stroke-linecap="round"></line>
+    </g>
+</svg>
