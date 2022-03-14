@@ -12,6 +12,7 @@ function Input(props: any) {
         key={props.name}
         onChange={(e: any) => props.setValue(e.target.value)}
         value={props.value}
+        placeholder={props.placeholder}
         className="py4 rounded bg-gray-200 px-4 py-4"
       ></input>
     </div>
@@ -95,8 +96,18 @@ export function NoOrder(props: any) {
         </div>
       )}
 
-      <Input name="Name for Order" value={name} setValue={setNameValue} />
-      <Input name="CreditCard" value={cc} setValue={setCcValue} />
+      <Input
+        name="Name for Order"
+        value={name}
+        setValue={setNameValue}
+        placeholder="Name you want the barista to call out"
+      />
+      <Input
+        name="CreditCard"
+        value={cc}
+        setValue={setCcValue}
+        placeholder="This input would be replaced with something like a Stripe Element"
+      />
 
       <button
         onClick={() => props.setPosition(1)}

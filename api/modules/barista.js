@@ -49,6 +49,9 @@ module.exports = {
                     id: '$id',
                     name: '$name',
                     email: '$email',
+                    // for demo only, in real scenarios you would want
+                    // to email the temp password rather than save it
+                    // in a db
                     pass: '$password'
                 }
             },

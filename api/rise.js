@@ -18,6 +18,9 @@ module.exports = {
                     pk: 'manager',
                     sk: 'manager_{$userId}',
                     email: '$email',
+                    // for demo only, in real scenarios you would want
+                    // to email the temp password rather than save it
+                    // in a db
                     pass: '$password'
                 }
             }
@@ -39,6 +42,9 @@ module.exports = {
                     pk: 'customer_{$userId}',
                     sk: 'meta',
                     email: '$email',
+                    // for demo only, in real scenarios you would want
+                    // to email the temp password rather than save it
+                    // in a db
                     pass: '$password'
                 }
             }
